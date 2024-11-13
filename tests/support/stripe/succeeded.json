@@ -1,0 +1,131 @@
+{
+    "amount": 110,
+    "amount_captured": 110,
+    "amount_refunded": 0,
+    "application": null,
+    "application_fee": null,
+    "application_fee_amount": null,
+    "balance_transaction": "txn_3QKXDZH9Wk4FvXVX0BjORB1Z",
+    "billing_details": {
+        "address": {
+            "city": null,
+            "country": null,
+            "line1": null,
+            "line2": null,
+            "postal_code": null,
+            "state": null
+        },
+        "email": null,
+        "name": null,
+        "phone": null
+    },
+    "calculated_statement_descriptor": "Stripe",
+    "captured": true,
+    "created": 1731468369,
+    "currency": "usd",
+    "customer": null,
+    "description": "Charge for Andres test",
+    "destination": null,
+    "dispute": null,
+    "disputed": false,
+    "failure_balance_transaction": null,
+    "failure_code": null,
+    "failure_message": null,
+    "fraud_details": {},
+    "id": "ch_3QKXDZH9Wk4FvXVX0mJXTQTC",
+    "invoice": null,
+    "livemode": false,
+    "metadata": {},
+    "object": "charge",
+    "on_behalf_of": null,
+    "order": null,
+    "outcome": {
+        "network_status": "approved_by_network",
+        "reason": null,
+        "risk_level": "normal",
+        "risk_score": 0,
+        "seller_message": "Payment complete.",
+        "type": "authorized"
+    },
+    "paid": true,
+    "payment_intent": null,
+    "payment_method": "card_1QKXDZH9Wk4FvXVX7H6Ny00c",
+    "payment_method_details": {
+        "card": {
+            "amount_authorized": 100,
+            "authorization_code": null,
+            "brand": "mastercard",
+            "checks": {
+                "address_line1_check": null,
+                "address_postal_code_check": null,
+                "cvc_check": "pass"
+            },
+            "country": "US",
+            "exp_month": 11,
+            "exp_year": 2025,
+            "extended_authorization": {
+                "status": "disabled"
+            },
+            "fingerprint": "pas9nwiSLJib5mNK",
+            "funding": "credit",
+            "incremental_authorization": {
+                "status": "unavailable"
+            },
+            "installments": null,
+            "last4": "4444",
+            "mandate": null,
+            "multicapture": {
+                "status": "unavailable"
+            },
+            "network": "mastercard",
+            "network_token": {
+                "used": false
+            },
+            "overcapture": {
+                "maximum_amount_capturable": 100,
+                "status": "unavailable"
+            },
+            "three_d_secure": null,
+            "wallet": null
+        },
+        "type": "card"
+    },
+    "receipt_email": null,
+    "receipt_number": null,
+    "receipt_url": "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF8xUUtXbFJIOVdrNEZ2WFZYKNG40LkGMgbk4Uu_Tp86LBb37P9VnqJ1ElzncXttU6-MslSjeQ1JSUpMDwq3uVDaj2v8Xb_rTqZ3XneA",
+    "refunded": false,
+    "review": null,
+    "shipping": null,
+    "source": {
+        "address_city": null,
+        "address_country": null,
+        "address_line1": null,
+        "address_line1_check": null,
+        "address_line2": null,
+        "address_state": null,
+        "address_zip": null,
+        "address_zip_check": null,
+        "brand": "MasterCard",
+        "country": "US",
+        "customer": null,
+        "cvc_check": "pass",
+        "dynamic_last4": null,
+        "exp_month": 11,
+        "exp_year": 2025,
+        "fingerprint": "pas9nwiSLJib5mNK",
+        "funding": "credit",
+        "id": "card_1QKXDZH9Wk4FvXVX7H6Ny00c",
+        "last4": "4444",
+        "metadata": {},
+        "name": null,
+        "object": "card",
+        "tokenization_method": null,
+        "wallet": null
+    },
+    "source_transfer": null,
+    "statement_descriptor": null,
+    "statement_descriptor_suffix": null,
+    "status": "succeeded",
+    "transfer_data": null,
+    "transfer_group": null
+}
