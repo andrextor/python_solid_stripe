@@ -1,23 +1,14 @@
 import os, stripe
 from dotenv import load_dotenv
 from stripe import ErrorObject
+from dataclasses import dataclass
+from stripe import Charge
 
 _ = load_dotenv()
 
-class PaymentProcessor:
-    def process_transaction(self, customer_data, payment_data):
-        if not customer_data.get("name"):
-            print("Invalid customer data: missing name")
-            return
-
-        if not customer_data.get("contact_info"):
-            print("Invalid customer data: missing contact info")
-            return
-
-        if not payment_data.get("source"):
-            print("Invalid payment data")
-            return
-
+@dataclass
+class StripePaymentProcesor:
+    def process_transaction(self, customer_data, payment_data) -> Charge:
         stripe.api_key = os.getenv("STRIPE_API_KEY")
 
         try:
@@ -30,24 +21,44 @@ class PaymentProcessor:
             print("Payment successful")
         except ErrorObject as e:
             print("Payment failed:", e)
-            return
+            raise e
+        
+        return charge
 
-        if "email" in customer_data["contact_info"]:
+@dataclass
+class CustomerValidator:
+    def validate(self, customer_data):
+        if not customer_data.get("name"):
+            raise ValueError('Invalid customer data: missing name')
+
+        if not customer_data.get("contact_info"):
+            raise ValueError('Invalid customer data: missing contact info')
+        
+@dataclass
+class PaymentValidator:
+    def validate(self, payment_data):
+        if not payment_data.get("source"):
+            raise ValueError('Invalid payment data')
+        
+@dataclass
+class Notifier:
+    def send(self, customer):
+        if "email" in customer:
             # import smtplib
             from email.mime.text import MIMEText
 
             msg = MIMEText("Thank you for your payment.")
             msg["Subject"] = "Payment Confirmation"
             msg["From"] = "no-reply@example.com"
-            msg["To"] = customer_data["contact_info"]["email"]
+            msg["To"] = customer["email"]
 
             # server = smtplib.SMTP("localhost")
             # server.send_message(msg)
             # server.quit()
-            print("Email sent to", customer_data["contact_info"]["email"])
+            print("Email sent to", customer["email"])
 
-        elif "phone" in customer_data["contact_info"]:
-            phone_number = customer_data["contact_info"]["phone"]
+        elif "phone" in customer:
+            phone_number = customer["phone"]
             sms_gateway = "the custom SMS Gateway"
             print(
                 f"send the sms using {sms_gateway}: SMS sent to {phone_number}: Thank you for your payment."
@@ -55,17 +66,36 @@ class PaymentProcessor:
 
         else:
             print("No valid contact information for notification")
-            return
-
-        with open("transactions.log", "a") as log_file:
+        
+@dataclass
+class Logger:
+    def info(self, customer_data, payment_data, charge: Charge, file_name: str = 'transactions.log'):
+          with open(file_name, "a") as log_file:
             log_file.write(
-                f"{customer_data['name']} paid {payment_data['amount']}\n"
+                f"info:{customer_data['name']} paid {payment_data['amount']}\n"
             )
             log_file.write(f"Payment status: {charge['status']}\n")
+        
+
+@dataclass
+class PaymentServices:
+    customer_validator = CustomerValidator()
+    payment_validator = PaymentValidator()
+    stripe_payment_process = StripePaymentProcesor()
+    notifier = Notifier()
+    logger = Logger()
+    
+    def process_transaction(self, customer_data, payment_data, logger_file_name: str = 'transactions.logs') -> Charge:
+        self.customer_validator.validate(customer_data)
+        self.payment_validator.validate(payment_data)
+        charge = self.stripe_payment_process.process_transaction(customer_data, payment_data)
+        self.notifier.send(customer_data['contact_info'])
+        self.logger.info(customer_data, payment_data, charge, logger_file_name)
+        return charge
 
 
 if __name__ == "__main__":
-    payment_processor = PaymentProcessor()
+    payment_processor = PaymentServices()
 
     customer_data_with_email = {
         "name": "Andres test",
@@ -76,7 +106,7 @@ if __name__ == "__main__":
         "contact_info": {"phone": "1234567890"},
     }
 
-    payment_data = {"amount": 120, "source": "tok_mastercard", "cvv": 123}
+    payment_data = {"amount": 130, "source": "tok_mastercard", "cvv": 123}
 
     payment_processor.process_transaction(customer_data_with_email, payment_data)
     """   payment_processor.process_transaction(
