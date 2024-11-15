@@ -4,13 +4,14 @@ from src.process import (
     PaymentServices,
     CustomerData,
     PaymentData,
-    ContactInfo
+    ContactInfo,
+    SMSNotifier
     )
 
 class ProcessTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        contact_info_data = ContactInfo(email='andres2@yopmail.com')
+        contact_info_data = ContactInfo(email='andres2@yopmail.com', phone='300515')
         self.customer = CustomerData(name='Andres', contact_info=contact_info_data)
         self.payment_data = PaymentData(amount=123, source="tok_mastercard")
         self.logger_file_name = 'test_transactions.log'
@@ -28,7 +29,8 @@ class ProcessTest(unittest.TestCase):
 
         mock_stripe_create.return_value = mock_response
 
-        process = PaymentServices()
+        sms_notifier = SMSNotifier()
+        process = PaymentServices(notifier=sms_notifier)
         charge = process.process_transaction(self.customer, self.payment_data, self.logger_file_name)
         assert charge['status'] == 'succeeded'
         assert charge['description'] == 'Charge for Andres test'
