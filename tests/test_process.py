@@ -1,12 +1,18 @@
 import unittest, json, os
 from unittest.mock import patch
-from src.process import PaymentServices
+from src.process import (
+    PaymentServices,
+    CustomerData,
+    PaymentData,
+    ContactInfo
+    )
 
 class ProcessTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.customer =  {"name": "Andres test", "contact_info": {"email": "andres3@yopmail.com"}}
-        self.payment_data = {"amount": 110, "source": "tok_mastercard", "cvv": 123}
+        contact_info_data = ContactInfo(email='andres2@yopmail.com')
+        self.customer = CustomerData(name='Andres', contact_info=contact_info_data)
+        self.payment_data = PaymentData(amount=123, source="tok_mastercard")
         self.logger_file_name = 'test_transactions.log'
         
     def tearDown(self) -> None:        
